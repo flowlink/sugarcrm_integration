@@ -44,8 +44,14 @@ class Sugarcrm
   end
 
   def add_order
-    order = Order.new(@payload['order'])
+    # Reject incomplete orders with a 200 response indicating why rather than an error.
+    if @payload['order']['billing_address'].nil? && @payload['order']['billing_address'].nil?
+      return "Order #{@payload['order']['id']} incomplete. Has missing addresses."
+    end
+
+    order    = Order.new(@payload['order'])
     customer = Customer.new(@payload['order'])
+
     begin
       sugar_contact_id = get_sugar_contact_id(customer)
       customer.sugar_contact_id = sugar_contact_id
@@ -58,8 +64,7 @@ class Sugarcrm
 
       ## Associate with corresponding Sugar Account
       @client.post "/Opportunities/" + sugar_opp_id +
-                   "/link/accounts/" + sugar_account_id,
-                   {}
+                   "/link/accounts/" + sugar_account_id, {}
 
       ## Create one RevenueLineItem in SugarCRM for each Order line item
       ## and link to corresponding ProductTemplate and Opportunity.
