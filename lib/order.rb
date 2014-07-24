@@ -2,25 +2,25 @@ require 'date'
 
 class Order
 
-  def initialize(spree_order = {})
-    @spree_order = spree_order
+  def initialize(wombat_order = {})
+    @wombat_order = wombat_order
   end
 
   def wombat_id
-    @spree_order['id']
+    @wombat_order['id']
   end
 
   def description
-    @spree_order.to_s
+    @wombat_order.to_s
     desc = "Number: #{wombat_id}\n"
-    desc += "Status: #{@spree_order['status']}\n" if @spree_order.has_key? 'status'
+    desc += "Status: #{@wombat_order['status']}\n" if @wombat_order.has_key? 'status'
     desc += "Items: \n"
-    @spree_order['line_items'].each do |item|
+    @wombat_order['line_items'].each do |item|
       desc += "- #{item['product_id']}, #{item['name']}, #{item['quantity']} unit(s)\n"
     end
-    if @spree_order.has_key? 'totals'
+    if @wombat_order.has_key? 'totals'
       ['item', 'adjustment', 'tax', 'shipping', 'payment', 'order'].each do |adjustment|
-        desc += "#{adjustment.capitalize} Total: #{@spree_order['totals'][adjustment]}\n"
+        desc += "#{adjustment.capitalize} Total: #{@wombat_order['totals'][adjustment]}\n"
       end
     end
 
@@ -28,18 +28,18 @@ class Order
   end
 
   def email
-    @spree_order['email']
+    @wombat_order['email']
   end
 
   def sugar_opportunity
     opportunity = Hash.new
     opportunity['id'] = wombat_id
     opportunity['sales_stage'] = 'Closed Won'
-    opportunity['name'] = "Wombat ID #{@spree_order['id']}"
+    opportunity['name'] = "Wombat ID #{@wombat_order['id']}"
     opportunity['description'] = description
     opportunity['lead_source'] = 'Web Site'
-    opportunity['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s if @spree_order.has_key? 'placed_on'
-    opportunity['amount'] = @spree_order['totals']['order'] if @spree_order.has_key? 'totals'
+    opportunity['date_closed'] = DateTime.parse(@wombat_order['placed_on']).to_date.to_s if @wombat_order.has_key? 'placed_on'
+    opportunity['amount'] = @wombat_order['totals']['order'] if @wombat_order.has_key? 'totals'
     return opportunity
   end
 
@@ -47,7 +47,7 @@ class Order
     rlis = Array.new
 
     ## Add one RLI for each line item
-    @spree_order['line_items'].each do |line_item|
+    @wombat_order['line_items'].each do |line_item|
       rli = Hash.new
       rli['sku'] = line_item['product_id']
       rli['product_template_id'] = line_item['product_id']
@@ -58,22 +58,22 @@ class Order
       rli['likely_case'] = line_item['quantity'] * line_item['price']
       rli['sales_stage'] = 'Closed Won'
       rli['probability'] = 100
-      rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s if @spree_order.has_key? 'placed_on'
+      rli['date_closed'] = DateTime.parse(@wombat_order['placed_on']).to_date.to_s if @wombat_order.has_key? 'placed_on'
       rlis.append(rli)
     end
 
     ## And one RLI for each adjustment, tax, shipping
-    if @spree_order.has_key? 'totals'
+    if @wombat_order.has_key? 'totals'
       ['adjustment', 'tax', 'shipping'].each do |adjustment|
         rli = Hash.new
         rli['name'] = adjustment
         rli['quantity'] = 1
-        rli['cost_price'] = @spree_order['totals'][adjustment]
-        rli['list_price'] = @spree_order['totals'][adjustment]
-        rli['likely_case'] = @spree_order['totals'][adjustment]
+        rli['cost_price'] = @wombat_order['totals'][adjustment]
+        rli['list_price'] = @wombat_order['totals'][adjustment]
+        rli['likely_case'] = @wombat_order['totals'][adjustment]
         rli['sales_stage'] = 'Closed Won'
         rli['probability'] = 100
-        rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s
+        rli['date_closed'] = DateTime.parse(@wombat_order['placed_on']).to_date.to_s
         rlis.append(rli)
       end
     end

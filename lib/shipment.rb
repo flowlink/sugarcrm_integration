@@ -1,29 +1,29 @@
 class Shipment
 
-  def initialize(spree_shipment = {})
-    @spree_shipment = spree_shipment
+  def initialize(wombat_shipment = {})
+    @wombat_shipment = wombat_shipment
   end
 
   def wombat_id
-    @spree_shipment['id']
+    @wombat_shipment['id']
   end
 
   def order_id
-    @spree_shipment['order_id']
+    @wombat_shipment['order_id']
   end
   
   def email
-    @spree_shipment['email']
+    @wombat_shipment['email']
   end
 
   def sugar_note
     desc = "Number: #{wombat_id}\n"
-    desc += "Status: #{@spree_shipment['status']}\n"
-    desc += "Shipping Method: #{@spree_shipment['shipping_method']}\n"
-    desc += "Tracking: #{@spree_shipment['tracking']}\n"
-    desc += "Shipped On: #{@spree_shipment['shipped_at']}\n"
+    desc += "Status: #{@wombat_shipment['status']}\n"
+    desc += "Shipping Method: #{@wombat_shipment['shipping_method']}\n"
+    desc += "Tracking: #{@wombat_shipment['tracking']}\n"
+    desc += "Shipped On: #{@wombat_shipment['shipped_at']}\n"
     desc += "Items: \n"
-    @spree_shipment['items'].each do |item|
+    @wombat_shipment['items'].each do |item|
       desc += "- #{item['product_id']}, #{item['name']}, #{item['quantity']} unit(s)\n"
     end
 
@@ -35,8 +35,8 @@ class Shipment
   end
   
   def wombat_order
-    order = @spree_shipment.clone
-    order['id'] = @spree_shipment['order_id']
+    order = @wombat_shipment.clone
+    order['id'] = @wombat_shipment['order_id']
     order['line_items'] = order['items']
     order
   end

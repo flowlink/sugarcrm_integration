@@ -1,20 +1,20 @@
 class Product
 
-  def initialize(spree_product = {})
-    @spree_product = spree_product
+  def initialize(wombat_product = {})
+    @wombat_product = wombat_product
   end
   
   def id
-    @spree_product['sku']
+    @wombat_product['sku']
   end
   
   def sugar_product_template
     product = Hash.new
-    product['id'] = @spree_product['sku']
-    product['name'] = @spree_product['name']
-    product['description'] = @spree_product['description']
-    product['cost_price'] = @spree_product['cost_price']
-    product['list_price'] = @spree_product['price']
+    product['id'] = @wombat_product['sku']
+    product['name'] = @wombat_product['name']
+    product['description'] = @wombat_product['description']
+    product['cost_price'] = @wombat_product['cost_price']
+    product['list_price'] = @wombat_product['price']
     return product
   end
 
