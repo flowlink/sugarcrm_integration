@@ -45,7 +45,7 @@ class Sugarcrm
 
   def add_order
     # Reject incomplete orders with a 200 response indicating why rather than an error.
-    if @payload['order']['billing_address'].nil? && @payload['order']['billing_address'].nil?
+    if @payload['order']['shipping_address'].nil? && @payload['order']['billing_address'].nil?
       return "Order #{@payload['order']['id']} incomplete. Has missing addresses."
     end
 
