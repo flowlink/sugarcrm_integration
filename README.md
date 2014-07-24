@@ -33,7 +33,7 @@ The following webhooks are implemented:
 | update_order | Updates an ecommerce Order's corresponding Opportunity within SugarCRM. |
 | add_product | Adds an ecommerce Product to SugarCRM. Creates a ProductTemplate within SugarCRM. The SugarCRM ProductTemplate has an ID which is that of the SKU of theProduct object sent from Wombat. |
 | update_product | Updates an ecommerce Product's corresponding ProductTemplate within SugarCRM. |
-| add_shipment | Adds an ecommerce Shipment to SugarCRM as a note linked to the corresponding Opportunity. |
+| add_shipment | Adds an ecommerce Shipment to SugarCRM as a note linked to the corresponding Opportunity. If no corresponding Opportunity, Account, or Contact exists in SugarCRM, each is created if needed. |
 | update_shipment | Updates an ecommerce Shipment note within SugarCRM |
 
 ## Wombat
