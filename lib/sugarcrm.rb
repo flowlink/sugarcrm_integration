@@ -58,6 +58,7 @@ class Sugarcrm
       sugar_account_id = get_sugar_account_id(customer)
 
       ## Create Opportunity in SugarCRM
+      puts order.inspect
       oauth_response = @client.post '/Opportunities',
                                     order.sugar_opportunity
       sugar_opp_id = oauth_response['id']
@@ -190,8 +191,11 @@ class Sugarcrm
 
       sugar_id = oauth_response['records'][0]['id']
       update_shipment shipment, sugar_id
+
     rescue => e
-      ## If we don't find this shipment, add it
+      ## If we don't find the associated Opportunity, add new order and shipment.
+      @payload['order'] = shipment.wombat_order
+      add_order
       add_shipment shipment
     end
   end

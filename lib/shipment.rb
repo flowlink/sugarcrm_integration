@@ -11,6 +11,10 @@ class Shipment
   def order_id
     @spree_shipment['order_id']
   end
+  
+  def email
+    @spree_shipment['email']
+  end
 
   def sugar_note
     desc = "Number: #{wombat_id}\n"
@@ -28,6 +32,13 @@ class Shipment
     note['description'] = desc
 
     return note
+  end
+  
+  def wombat_order
+    order = @spree_shipment.clone
+    order['id'] = @spree_shipment['order_id']
+    order['line_items'] = order['items']
+    order
   end
 
 end

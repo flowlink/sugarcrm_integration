@@ -13,13 +13,15 @@ class Order
   def description
     @spree_order.to_s
     desc = "Number: #{wombat_id}\n"
-    desc += "Status: #{@spree_order['status']}\n"
+    desc += "Status: #{@spree_order['status']}\n" if @spree_order.has_key? 'status'
     desc += "Items: \n"
     @spree_order['line_items'].each do |item|
       desc += "- #{item['product_id']}, #{item['name']}, #{item['quantity']} unit(s)\n"
     end
-    ['item', 'adjustment', 'tax', 'shipping', 'payment', 'order'].each do |adjustment|
-      desc += "#{adjustment.capitalize} Total: #{@spree_order['totals'][adjustment]}\n"
+    if @spree_order.has_key? 'totals'
+      ['item', 'adjustment', 'tax', 'shipping', 'payment', 'order'].each do |adjustment|
+        desc += "#{adjustment.capitalize} Total: #{@spree_order['totals'][adjustment]}\n"
+      end
     end
 
     desc
@@ -36,8 +38,8 @@ class Order
     opportunity['name'] = "Wombat ID #{@spree_order['id']}"
     opportunity['description'] = description
     opportunity['lead_source'] = 'Web Site'
-    opportunity['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s
-    opportunity['amount'] = @spree_order['totals']['order']
+    opportunity['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s if @spree_order.has_key? 'placed_on'
+    opportunity['amount'] = @spree_order['totals']['order'] if @spree_order.has_key? 'totals'
     return opportunity
   end
 
@@ -56,22 +58,24 @@ class Order
       rli['likely_case'] = line_item['quantity'] * line_item['price']
       rli['sales_stage'] = 'Closed Won'
       rli['probability'] = 100
-      rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s
+      rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s if @spree_order.has_key? 'placed_on'
       rlis.append(rli)
     end
 
     ## And one RLI for each adjustment, tax, shipping
-    ['adjustment', 'tax', 'shipping'].each do |adjustment|
-      rli = Hash.new
-      rli['name'] = adjustment
-      rli['quantity'] = 1
-      rli['cost_price'] = @spree_order['totals'][adjustment]
-      rli['list_price'] = @spree_order['totals'][adjustment]
-      rli['likely_case'] = @spree_order['totals'][adjustment]
-      rli['sales_stage'] = 'Closed Won'
-      rli['probability'] = 100
-      rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s
-      rlis.append(rli)
+    if @spree_order.has_key? 'totals'
+      ['adjustment', 'tax', 'shipping'].each do |adjustment|
+        rli = Hash.new
+        rli['name'] = adjustment
+        rli['quantity'] = 1
+        rli['cost_price'] = @spree_order['totals'][adjustment]
+        rli['list_price'] = @spree_order['totals'][adjustment]
+        rli['likely_case'] = @spree_order['totals'][adjustment]
+        rli['sales_stage'] = 'Closed Won'
+        rli['probability'] = 100
+        rli['date_closed'] = DateTime.parse(@spree_order['placed_on']).to_date.to_s
+        rlis.append(rli)
+      end
     end
 
     return rlis
