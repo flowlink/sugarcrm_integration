@@ -4,14 +4,14 @@
 
 [SugarCRM](http://www.sugarcrm.com/) is a popular customer relationship management system.
 
-This is a fully hosted and supported integration for use with the [Wombat](http://wombat.co) product. With this integration you can perform the following functions:
+This is a fully hosted and supported integration for use with the [FlowLink](http://flowlink.io/) product. With this integration you can perform the following functions:
 
 * Send product information to SugarCRM whenever products are created or updated.
 * Send customer and order information to SugarCRM whenever orders are created or updated.
 
 ## Connection Parameters
 
-The following parameters must be setup within [Wombat](http://wombat.co):
+The following parameters must be setup within [FlowLink](http://flowlink.io/):
 
 | Name | Value |
 | :----| :-----|
@@ -36,10 +36,12 @@ The following webhooks are implemented:
 | add_shipment | Adds an ecommerce Shipment to SugarCRM as a note linked to the corresponding Opportunity. If no corresponding Opportunity, Account, or Contact exists in SugarCRM, each is created if needed. |
 | update_shipment | Updates an ecommerce Shipment note within SugarCRM |
 
-## Wombat
+# About FlowLink
 
-[Wombat](http://wombat.co) allows you to connect to your own custom integrations.  Feel free to modify the source code and host your own version of the integration - or beter yet, help to make the official integration better by submitting a pull request!
-
-![Wombat Logo](http://spreecommerce.com/images/wombat_logo.png)
+[FlowLink](http://flowlink.io/) allows you to connect to your own custom integrations.
+Feel free to modify the source code and host your own version of the integration
+or better yet, help to make the official integration better by submitting a pull request!
 
 This integration is 100% open source an licensed under the terms of the New BSD License.
+
+![FlowLink Logo](http://flowlink.io/wp-content/uploads/logo-1.png)
