@@ -1,42 +1,42 @@
 class Shipment
 
-  def initialize(wombat_shipment = {})
-    @wombat_shipment = wombat_shipment
+  def initialize(flowlink_shipment = {})
+    @flowlink_shipment = flowlink_shipment
   end
 
-  def wombat_id
-    @wombat_shipment['id']
+  def flowlink_id
+    @flowlink_shipment['id']
   end
 
   def order_id
-    @wombat_shipment['order_id']
+    @flowlink_shipment['order_id']
   end
   
   def email
-    @wombat_shipment['email']
+    @flowlink_shipment['email']
   end
 
   def sugar_note
-    desc = "Number: #{wombat_id}\n"
-    desc += "Status: #{@wombat_shipment['status']}\n"
-    desc += "Shipping Method: #{@wombat_shipment['shipping_method']}\n"
-    desc += "Tracking: #{@wombat_shipment['tracking']}\n"
-    desc += "Shipped On: #{@wombat_shipment['shipped_at']}\n"
+    desc = "Number: #{flowlink_id}\n"
+    desc += "Status: #{@flowlink_shipment['status']}\n"
+    desc += "Shipping Method: #{@flowlink_shipment['shipping_method']}\n"
+    desc += "Tracking: #{@flowlink_shipment['tracking']}\n"
+    desc += "Shipped On: #{@flowlink_shipment['shipped_at']}\n"
     desc += "Items: \n"
-    @wombat_shipment['items'].each do |item|
+    @flowlink_shipment['items'].each do |item|
       desc += "- #{item['product_id']}, #{item['name']}, #{item['quantity']} unit(s)\n"
     end
 
     note = Hash.new
-    note['name'] = "Shipment #{wombat_id}"
+    note['name'] = "Shipment #{flowlink_id}"
     note['description'] = desc
 
     return note
   end
   
-  def wombat_order
-    order = @wombat_shipment.clone
-    order['id'] = @wombat_shipment['order_id']
+  def flowlink_order
+    order = @flowlink_shipment.clone
+    order['id'] = @flowlink_shipment['order_id']
     order['line_items'] = order['items']
     order
   end

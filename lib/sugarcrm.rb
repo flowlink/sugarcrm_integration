@@ -36,9 +36,9 @@ class Sugarcrm
       sugar_contact_id = get_sugar_contact_id(customer)
       customer.sugar_contact_id = sugar_contact_id
       sugar_account_id = get_sugar_account_id(customer)
-      "Customer with Wombat ID #{customer.wombat_id} was added / updated."
+      "Customer with FlowLink ID #{customer.flowlink_id} was added / updated."
     rescue => e
-      message = "Unable to add / update customer with Wombat ID #{customer.wombat_id}: \n" + e.message
+      message = "Unable to add / update customer with FlowLink ID #{customer.flowlink_id}: \n" + e.message
       raise SugarcrmAddUpdateObjectError, message, caller
     end
   end
@@ -77,9 +77,9 @@ class Sugarcrm
         ## Todo: Create product for each RLI if one does not exist
       end
 
-      "Order with Wombat ID #{order.wombat_id} was added."
+      "Order with FlowLink ID #{order.flowlink_id} was added."
     rescue => e
-      message = "Unable to add order #{order.wombat_id}: \n" + e.message
+      message = "Unable to add order #{order.flowlink_id}: \n" + e.message
       raise SugarcrmAddUpdateObjectError, message, caller
     end
   end
@@ -87,15 +87,15 @@ class Sugarcrm
   def update_order
     order = Order.new(@payload['order'])
     begin
-      @client.put '/Opportunities/' + order.wombat_id,
+      @client.put '/Opportunities/' + order.flowlink_id,
                   order.sugar_opportunity
 
       ## Todo:
       ## Delete Opportunity's RLIs here and recreate
 
-      "Order #{order.wombat_id} was updated."
+      "Order #{order.flowlink_id} was updated."
     rescue => e
-      message = "Unable to update order #{order.wombat_id}: \n" + e.message
+      message = "Unable to update order #{order.flowlink_id}: \n" + e.message
       raise SugarcrmAddUpdateObjectError, message, caller
     end
   end
@@ -173,9 +173,9 @@ class Sugarcrm
                     "/link/notes/",
                     shipment.sugar_note
 
-      "Notes for shipment with Wombat ID #{shipment.wombat_id} were added."
+      "Notes for shipment with FlowLink ID #{shipment.flowlink_id} were added."
     rescue => e
-      message = "Unable to add notes for shipment with Wombat ID #{shipment.wombat_id}: \n" +
+      message = "Unable to add notes for shipment with FlowLink ID #{shipment.flowlink_id}: \n" +
                 e.message
       raise SugarcrmAddUpdateObjectError, message, caller
     end
@@ -187,14 +187,14 @@ class Sugarcrm
       oauth_response =  @client.get "/Opportunities/" + shipment.order_id +
                                       "/link/notes/" +
                                       "?filter[0][name]=" +
-                                      URI.encode("Shipment #{shipment.wombat_id}")
+                                      URI.encode("Shipment #{shipment.flowlink_id}")
 
       sugar_id = oauth_response['records'][0]['id']
       update_shipment shipment, sugar_id
 
     rescue => e
       ## If we don't find the associated Opportunity, add new order and shipment.
-      @payload['order'] = shipment.wombat_order
+      @payload['order'] = shipment.flowlink_order
       add_order
       add_shipment shipment
     end
@@ -206,9 +206,9 @@ class Sugarcrm
                     "/link/notes/#{sugar_id}",
                     shipment.sugar_note
 
-      "Notes for shipment with Wombat ID #{shipment.wombat_id} were updated."
+      "Notes for shipment with FlowLink ID #{shipment.flowlink_id} were updated."
     rescue => e
-      message = "Unable to update notes for shipment with Wombat ID #{shipment.wombat_id}: \n" +
+      message = "Unable to update notes for shipment with FlowLink ID #{shipment.flowlink_id}: \n" +
                 e.message
       raise SugarcrmAddUpdateObjectError, message, caller
     end
