@@ -25,7 +25,7 @@ end
 
 group :production do
   gem 'foreman', '0.66.0'
-  gem 'unicorn'
+  gem 'puma'
 end
 
 gem 'endpoint_base', github: 'flowlink/endpoint_base'
