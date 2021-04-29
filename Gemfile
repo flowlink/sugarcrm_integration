@@ -7,6 +7,8 @@ gem 'jbuilder', '2.0.7'
 gem 'capistrano'
 gem 'rest-client'
 gem 'require_all'
+gem 'foreman', '0.66.0'
+gem 'puma'
 
 group :development do
   gem 'pry'
@@ -21,11 +23,6 @@ group :test do
   gem 'terminal-notifier-guard'
   gem 'rb-fsevent', '~> 0.9.1'
   gem 'rack-test'
-end
-
-group :production do
-  gem 'foreman', '0.66.0'
-  gem 'puma'
 end
 
 gem 'endpoint_base', github: 'flowlink/endpoint_base'
