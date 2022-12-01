@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'sinatra'
-gem 'tilt', '~> 1.4.1'
+gem 'tilt', '~> 2.0.11'
 gem 'tilt-jbuilder'
 gem 'jbuilder', '2.0.7'
 gem 'capistrano'
